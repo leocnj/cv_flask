@@ -17,7 +17,7 @@ app.debug = True
 
 @app.route('/')
 def hello_world():
-    return render_template('index.html')
+    return render_template('home.html')
 
 
 @app.route('/upload', methods=['POST'])
@@ -31,7 +31,7 @@ def upload_file():
 @app.route('/show/<filename>')
 def uploaded_file(filename):
     filename = 'http://127.0.0.1:5000/uploads/' + filename
-    return render_template('index.html', filename=filename)
+    return render_template('home.html', filename=filename)
 
 
 @app.route('/uploads/<filename>')
