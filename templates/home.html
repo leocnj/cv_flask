@@ -11,7 +11,12 @@
         <input type="submit" value="Upload your image" class="btn btn-primary">
     </form>
 
-    <img src=" {{ filename }}">
+    {% if img_org %}
+    <img src="{{ url_for('send_file', filename=img_org) }}">
+    {% endif %}
+    {% if img_proc %}
+    <img src="{{ url_for('send_file2', filename=img_proc) }}">
+    {% endif %}
 
 </div>
 {% endblock %}
