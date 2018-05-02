@@ -7,7 +7,9 @@
 import os
 from subprocess import call
 
-from flask import Flask, render_template, request, send_from_directory
+from flask import Flask, render_template, request, send_from_directory, redirect, url_for
+import base64
+import logging
 
 app = Flask(__name__)
 
@@ -24,6 +26,31 @@ app.debug = True
 def hello_world():
     return render_template('home.html')
 
+
+@app.route('/webrtc')
+def record_webrtc():
+    return render_template('webrtc.html')
+
+# use redirect based on http://bit.ly/2KwDMlB
+@app.route('/rtc_result/<string:filename><string:processed_img>')
+def rtc_result(filename, processed_img):
+    return render_template('home.html', img_org=filename, img_proc=processed_img)
+
+
+@app.route('/from_rtc', methods=['POST'])
+def upload_base64():
+    file = request.values['fileData']
+    starter = file.find(',')
+    image_data = file[starter+1:]
+    image_data = bytes(image_data, encoding="ascii")
+    with open('uploads/base64.jpeg', 'wb') as fh:
+        fh.write(base64.decodebytes(image_data))
+    filename = 'base64.jpeg'
+    run_openface(filename)
+    processed_img = filename.replace('jpeg', 'jpg')
+    return redirect(url_for('rtc_result', filename=filename, processed_img=processed_img))
+
+
 @app.route('/upload', methods=['POST'])
 def upload_file():
     file = request.files['image']
@@ -33,6 +60,7 @@ def upload_file():
     run_openface(filename)
     processed_img = filename.replace('jpeg', 'jpg')
     return render_template('home.html', img_org=filename, img_proc=processed_img)
+
 
 def run_openface(filename):
     '''
@@ -55,3 +83,9 @@ def send_file(filename):
 @app.route('/uploads/processed/<filename>')
 def send_file2(filename):
     return send_from_directory(PROCESSED_FOLDER, filename)
+
+
+if __name__ == '__main__':
+    app.jinja_env.auto_reload = True
+    app.config['TEMPLATES_AUTO_RELOAD'] = True
+    app.run(debug=True, host='127.0.0.1')
