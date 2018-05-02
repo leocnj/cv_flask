@@ -32,9 +32,9 @@ def record_webrtc():
     return render_template('webrtc.html')
 
 # use redirect based on http://bit.ly/2KwDMlB
-@app.route('/rtc_result/<string:filename><string:processed_img>')
-def rtc_result(filename, processed_img):
-    return render_template('home.html', img_org=filename, img_proc=processed_img)
+@app.route('/rtc_result')
+def rtc_result():
+    return render_template('base64.html')
 
 
 @app.route('/from_rtc', methods=['POST'])
@@ -47,8 +47,9 @@ def upload_base64():
         fh.write(base64.decodebytes(image_data))
     filename = 'base64.jpeg'
     run_openface(filename)
-    processed_img = filename.replace('jpeg', 'jpg')
-    return redirect(url_for('rtc_result', filename=filename, processed_img=processed_img))
+    # redirect doesn't work for POST not from browser
+    # processed_img = filename.replace('jpeg', 'jpg')
+    return redirect(url_for('rtc_result'))
 
 
 @app.route('/upload', methods=['POST'])
