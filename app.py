@@ -85,6 +85,24 @@ def send_file(filename):
 def send_file2(filename):
     return send_from_directory(PROCESSED_FOLDER, filename)
 
+# disable cache static files inside Flask on server side
+# https://stackoverflow.com/questions/47376744/how-to-prevent-cached-response-flask-server-using-chrome
+# however, seems not work.
+# now on browser side, two ways can disable cache
+# - using incognito mode
+# - open inspec -> network -> disable cache
+@app.after_request
+def add_header(r):
+    """
+    Add headers to both force latest IE rendering engine or Chrome Frame,
+    and also to cache the rendered page for 10 minutes.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
+
 
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
