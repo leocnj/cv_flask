@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="jumbotron text-center">
+    <h1>CV demo on Flask</h1>
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+      <span class="btn btn-default btn-file">
+        Browse <input type="file" name="video">
+      </span>
+        <input type="submit" value="Upload your .mp4 video" class="btn btn-primary">
+    </form>
+
+    {% if img_org %}
+    <video width="320" height="240" controls preload="none">
+        <source src="{{ url_for('send_file', filename=img_org) }}" type="video/mp4"/>
+    </video>
+    {% endif %}
+    {% if img_proc %}
+     <video width="320" height="240" controls preload="none">
+        <source src="{{ url_for('send_file2', filename=img_proc) }}" type="video/mp4"/>
+    </video>
+    {% endif %}
+
+</div>
+{% endblock %}
+
