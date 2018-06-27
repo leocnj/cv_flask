@@ -71,13 +71,13 @@ def run_openface(filename):
     '''
     with open("./tmp/output.log", 'a') as output:
         call(
-            "docker run -v /Users/lchen/Documents/GitHub/cv_flask/uploads:/data -w \'/data\' -i -t openface_v1.0 /opt/OpenFace/build/bin/FeatureExtraction -f " + filename,
+            "docker run -v `pwd`/uploads:/data -w \'/data\' -i -t openface_v1.0 /opt/OpenFace/build/bin/FeatureExtraction -f " + filename,
             shell=True, stdout=output, stderr=output)
         # need convert avi to mp4 for display
         avi = filename.replace('mp4', 'avi')
         print("convert {} to {}".format(avi, filename))
         call(
-            "ffmpeg -i /Users/lchen/Documents/GitHub/cv_flask/uploads/processed/" + avi + "-y /Users/lchen/Documents/GitHub/cv_flask/uploads/processed/" + filename,
+            "ffmpeg -i `pwd`/uploads/processed/" + avi + "-y /Users/lchen/Documents/GitHub/cv_flask/uploads/processed/" + filename,
             shell=True, stdout=output, stderr=output)
 
 

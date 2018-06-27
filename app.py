@@ -62,7 +62,8 @@ def upload_file():
     processed_img = filename.replace('jpeg', 'jpg')
     return render_template('home.html', img_org=filename, img_proc=processed_img)
 
-
+# use relative path in docker
+# see https://github.com/moby/moby/issues/4830
 def run_openface(filename):
     '''
 
@@ -71,7 +72,7 @@ def run_openface(filename):
     '''
     with open("./tmp/output.log", 'a') as output:
         call(
-            "docker run -v /Users/lchen/Documents/GitHub/cv_flask/uploads:/data -w \'/data\' -i -t openface_v1.0 /opt/OpenFace/build/bin/FaceLandmarkImg -f " + filename,
+            "docker run -v `pwd`/uploads:/data -w \'/data\' -i -t openface_v1.0 /opt/OpenFace/build/bin/FaceLandmarkImg -f " + filename,
             shell=True, stdout=output, stderr=output)
 
 
