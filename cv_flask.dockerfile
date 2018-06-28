@@ -39,7 +39,8 @@ RUN apt-get update && \
 	python-numpy \
 	sshfs \
 	unzip \
-	wget
+	wget \
+&&  rm -rf /var/lib/apt/lists/* 
 
 # OpenCV 3.4.0
 RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip && \
@@ -70,15 +71,15 @@ RUN rm 3.4.0.zip
 
 # set working directory
 # WORKDIR /opt/OpenFace/build/bin
-
-# python flask
-RUN apt-get install -y python-pip python-dev
-RUN pip install Flask
-
-# FFMPEG
-RUN apt-get update && apt-get install -y software-properties-common
-RUN add-apt-repository ppa:djcj/hybrid
-RUN apt-get update && apt-get install -y ffmpeg
+# python flask, FFMPEG
+RUN apt-get update && \
+    apt-get install -y python-pip python-dev && \
+    pip install Flask && \
+    apt-get install -y software-properties-common && \
+    add-apt-repository ppa:djcj/hybrid && \
+    apt-get install -y ffmpeg && \
+    apt-get remove -y python-dev python-pip && \
+    rm -rf /var/lib/apt/lists/*  
 
 ###################################################################
 # Flask App
@@ -86,6 +87,6 @@ COPY . /App
 
 WORKDIR /App
 
-# ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "python" ]
 
-# CMD [ "app.py" ]
+CMD [ "app.py" ]
