@@ -92,6 +92,9 @@ COPY . /App
 
 WORKDIR /App
 
+# Make port 80 available to the world outside this container
+EXPOSE 80
+
 ENTRYPOINT [ "python" ]
 
 CMD [ "app.py" ]
