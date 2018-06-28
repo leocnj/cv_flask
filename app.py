@@ -72,7 +72,7 @@ def run_openface(filename):
     '''
     with open("./tmp/output.log", 'a') as output:
         call(
-            "/opt/OpenFace/build/bin/FaceLandmarkImg -f " + os.path.join(app.config['UPLOAD_FOLDER'], filename),
+            "/usr/local/bin/FaceLandmarkImg -f " + os.path.join(app.config['UPLOAD_FOLDER'], filename),
             shell=True, stdout=output, stderr=output)
 
 
@@ -82,7 +82,7 @@ def send_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
 
-@app.route('/uploads/processed/<filename>')
+@app.route('/processed/<filename>')
 def send_file2(filename):
     return send_from_directory(PROCESSED_FOLDER, filename)
 

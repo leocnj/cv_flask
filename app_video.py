@@ -69,7 +69,7 @@ def run_openface(filename):
     '''
     with open("./tmp/output.log", 'a') as output:
         call(
-            "/opt/OpenFace/build/bin/FeatureExtraction -f " + os.path.join(app.config['UPLOAD_FOLDER'], filename),
+            "/usr/local/bin/FeatureExtraction -f " + os.path.join(app.config['UPLOAD_FOLDER'], filename),
             shell=True, stdout=output, stderr=output)
         # need convert avi to mp4 for display
         avi = filename.replace('mp4', 'avi')
