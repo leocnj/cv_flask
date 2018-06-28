@@ -52,22 +52,27 @@ RUN wget https://github.com/opencv/opencv/archive/3.4.0.zip && \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D WITH_TBB=ON -D BUILD_SHARED_LIBS=OFF .. && \
 	make -j2 && \
-	make install
+	make install && \
+    rm -r /opt/opencv-3.4.0 && \
+    cd / && rm 3.4.0.zip
 
 # OpenFace lastest
-RUN cd /opt && \
-	git clone https://github.com/TadasBaltrusaitis/OpenFace.git && \
-	cd OpenFace && \
+# RUN cd /opt && \
+# 	git clone https://github.com/TadasBaltrusaitis/OpenFace.git && \
+#   git is too slow; use zip 480MB
+RUN wget https://github.com/TadasBaltrusaitis/OpenFace/archive/OpenFace_v1.0.0.zip && \
+    unzip OpenFace_v1.0.0.zip -d /opt && \
+    cd /opt/OpenFace-OpenFace_v1.0.0 && \
 	mkdir build && \
 	cd build && \
     cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D WITH_TBB=ON -D BUILD_SHARED_LIBS=OFF .. && \
 	make -j2 && \
-	make install
+	make install && \
+    rm -r /opt/OpenFace-OpenFace_v1.0.0 && \
+    cd / && rm OpenFace_v1.0.0.zip
 
-# clean up
-RUN rm 3.4.0.zip
 
 # set working directory
 # WORKDIR /opt/OpenFace/build/bin
