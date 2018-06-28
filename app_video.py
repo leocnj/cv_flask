@@ -16,9 +16,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = os.path.basename('uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-PROCESSED_FOLDER = 'uploads/processed'
-print(PROCESSED_FOLDER)
-
+PROCESSED_FOLDER = os.path.basename('processed')
 app.config['PROCESSED_FOLDER'] = PROCESSED_FOLDER
 app.debug = True
 
@@ -71,13 +69,13 @@ def run_openface(filename):
     '''
     with open("./tmp/output.log", 'a') as output:
         call(
-            "docker run -v `pwd`/uploads:/data -w \'/data\' -i -t openface_v1.0 /opt/OpenFace/build/bin/FeatureExtraction -f " + filename,
+            "/opt/OpenFace/build/bin/FeatureExtraction -f " + os.path.join(app.config['UPLOAD_FOLDER'], filename),
             shell=True, stdout=output, stderr=output)
         # need convert avi to mp4 for display
         avi = filename.replace('mp4', 'avi')
         print("convert {} to {}".format(avi, filename))
         call(
-            "ffmpeg -i `pwd`/uploads/processed/" + avi + "-y /Users/lchen/Documents/GitHub/cv_flask/uploads/processed/" + filename,
+            "ffmpeg -i " + os.path.join(app.config['PROCESSED_FOLDER'], avi) + " -exity " + os.path.join(app.config['PROCESSED_FOLDER'], filename),
             shell=True, stdout=output, stderr=output)
 
 
@@ -87,7 +85,7 @@ def send_file(filename):
     return send_from_directory(UPLOAD_FOLDER, filename)
 
 
-@app.route('/uploads/processed/<filename>')
+@app.route('/processed/<filename>')
 def send_file2(filename):
     return send_from_directory(PROCESSED_FOLDER, filename)
 
@@ -95,4 +93,4 @@ def send_file2(filename):
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(debug=True, host='127.0.0.1')
+    app.run(debug=True, host='0.0.0.0')

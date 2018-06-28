@@ -86,6 +86,6 @@ COPY . /App
 
 WORKDIR /App
 
-ENTRYPOINT [ "python" ]
+# ENTRYPOINT [ "python" ]
 
-CMD [ "app.py" ]
+# CMD [ "app.py" ]
