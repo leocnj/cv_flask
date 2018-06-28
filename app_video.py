@@ -75,7 +75,7 @@ def run_openface(filename):
         avi = filename.replace('mp4', 'avi')
         print("convert {} to {}".format(avi, filename))
         call(
-            "ffmpeg -i " + os.path.join(app.config['PROCESSED_FOLDER'], avi) + " -exity " + os.path.join(app.config['PROCESSED_FOLDER'], filename),
+            "ffmpeg -i " + os.path.join(app.config['PROCESSED_FOLDER'], avi) + " -y " + os.path.join(app.config['PROCESSED_FOLDER'], filename),
             shell=True, stdout=output, stderr=output)
 
 
