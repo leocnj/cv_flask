@@ -16,7 +16,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = os.path.basename('uploads')
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-PROCESSED_FOLDER = 'uploads/processed'
+PROCESSED_FOLDER = os.path.basename('processed')
 print(PROCESSED_FOLDER)
 
 app.config['PROCESSED_FOLDER'] = PROCESSED_FOLDER
@@ -72,7 +72,7 @@ def run_openface(filename):
     '''
     with open("./tmp/output.log", 'a') as output:
         call(
-            "docker run -v `pwd`/uploads:/data -w \'/data\' -i -t openface_v1.0 /opt/OpenFace/build/bin/FaceLandmarkImg -f " + filename,
+            "/opt/OpenFace/build/bin/FaceLandmarkImg -f " + os.path.join(app.config['UPLOAD_FOLDER'], filename),
             shell=True, stdout=output, stderr=output)
 
 
@@ -108,4 +108,4 @@ def add_header(r):
 if __name__ == '__main__':
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
-    app.run(debug=True, host='127.0.0.1')
+    app.run(debug=True, host='0.0.0.0')
